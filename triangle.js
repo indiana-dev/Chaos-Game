@@ -105,7 +105,7 @@ function initGame(preset) {
     } else {
         hideElement(show_forbidden_zone_ctrl)
     }
-    
+
     randomizeColors()
     updateColors()
     cam.init()
@@ -127,10 +127,6 @@ function setup() {
     screen_size = getScreenSize()
     createCanvas(screen_size, screen_size)
     colorMode(RGB, 1)
-
-    let t = createButton("Reload")
-            .position(screen_size + 10, screen_size/2)
-            .mousePressed(initGame)
 
     infrared_colors = [color('black'), color('#20008c'), color('#c07'), color('gold'), color('white')]
     //infrared_colors = [color('#a8e6cf'), color('#dcedc1'), color('#ffd3b6'), color('#ffaaa5'), color('#ff8b94')]
