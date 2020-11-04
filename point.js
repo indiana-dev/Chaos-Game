@@ -12,7 +12,6 @@ class Point {
         this.last_edges = []
 
         this.initCoordinates()
-        this.initFrequency()
     }
 
     initCoordinates() {
@@ -20,19 +19,6 @@ class Point {
 
         this.x = random_edge.x
         this.y = random_edge.y
-    }
-
-    initFrequency() {
-        this.frequency = []
-        this.max_freqency = 0
-
-        for(let i = 0 ; i < screen_size; i++) {
-            this.frequency[i] = []
-    
-            for(let j = 0; j < screen_size; j++) {
-                this.frequency[i][j] = 0
-            }
-        }
     }
 
     update() {
@@ -55,37 +41,19 @@ class Point {
         let freq_x = floor(this.x * (screen_size-1))
         let freq_y = floor(this.y * (screen_size-1))
 
-        this.frequency[freq_x][freq_y]++
+        fm.frequency[freq_x][freq_y]++
 
-        if(this.frequency[freq_x][freq_y] > this.max_freqency) {
-            this.max_freqency = this.frequency[freq_x][freq_y]
+        if(fm.frequency[freq_x][freq_y] > fm.max_freqency) {
+            fm.max_freqency = fm.frequency[freq_x][freq_y]
         }
     }
 
     draw() {
-        let new_x = map(this.x, cam.x - cam.size / 2, cam.x + cam.size / 2, 0, 1)
-        let new_y = map(this.y, cam.y - cam.size / 2, cam.y + cam.size / 2, 0, 1)
-
-        if(new_x < 0 || new_x > 1 || new_y < 0 || new_y > 1) {
-            return
-        }
-
-        new_x = floor(new_x * (screen_size - 1))
-        new_y = floor(new_y * (screen_size - 1))
-
-        if(!settings.fast_colors) {
-            stroke(getInfraredColor(this.frequency[new_x][new_y] / settings.fast_colors_attenuation))
-        }
-
-        point(new_x, new_y)
-    }
-
-    fast_draw() {
         let draw_x = floor(this.x * (screen_size-1))
         let draw_y = floor(this.y * (screen_size-1))
 
         if(!settings.fast_colors) {
-            stroke(getInfraredColor(this.frequency[new_x][new_y] / settings.fast_colors_attenuation))
+            stroke(getInfraredColor(fm.frequency[draw_x][draw_y] / settings.fast_colors_attenuation))
         }
 
         point(draw_x, draw_y)

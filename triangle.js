@@ -11,36 +11,30 @@ let settings = {
 
 let enable_zoom = false
 
-class Camera {
-    constructor() {
-        this.init()
-    }
-
-    init() {
-        this.x = 0.5
-        this.y = 0.5
-        this.size = 1
-
-        this.update()
-    }
-
-    update() {
-        this.half_size = this.size / 2
-
-        this.max_x = this.x + this.half_size
-        this.min_x = this.x - this.half_size
-
-        this.max_y = this.y + this.half_size
-        this.min_y = this.y - this.half_size
-    }
-}
-
-let cam = new Camera()
 let presets = []
 
 let bg_color, fg_color
 
 p5.disableFriendlyErrors = true;
+
+class FrequencyManager {
+    constructor() {
+        this.initFrequency()
+    }
+
+    initFrequency() {
+        this.frequency = []
+        this.max_freqency = 0
+
+        for(let i = 0 ; i < screen_size; i++) {
+            this.frequency[i] = []
+    
+            for(let j = 0; j < screen_size; j++) {
+                this.frequency[i][j] = 0
+            }
+        }
+    }
+}
 
 class Preset {
     constructor(name, pattern, rule, step = 1/2) {
@@ -106,9 +100,9 @@ function initGame(preset) {
         hideElement(show_forbidden_zone_ctrl)
     }
 
+    fm.initFrequency()
     randomizeColors()
     updateColors()
-    cam.init()
 }
 
 function getRandomStep() {
@@ -127,6 +121,8 @@ function setup() {
     screen_size = getScreenSize()
     createCanvas(screen_size, screen_size)
     colorMode(RGB, 1)
+
+    fm = new FrequencyManager()
 
     infrared_colors = [color('black'), color('#20008c'), color('#c07'), color('gold'), color('white')]
     //infrared_colors = [color('#a8e6cf'), color('#dcedc1'), color('#ffd3b6'), color('#ffaaa5'), color('#ff8b94')]
@@ -180,20 +176,10 @@ function mouseClicked() {
         return
     }
 
-    if(!enable_zoom) {
-        if(settings.mode_add_point) {
-            pt.pattern.push({x:mouseX/screen_size, y:mouseY/screen_size,index:pt.pattern.length})
-            background(bg_color)
-        }
-        return
-    } 
-
-    cam.x = map(mouseX, 0, screen_size, cam.min_x, cam.max_x)
-    cam.y = map(mouseY, 0, screen_size, cam.min_y, cam.max_y)
-    cam.size *= 0.9
-    cam.update()
-
-    background(0)
+    if(settings.mode_add_point) {
+        pt.pattern.push({x:mouseX/screen_size, y:mouseY/screen_size,index:pt.pattern.length})
+        background(bg_color)
+    }
 }
 
 function mouseDragged() {
