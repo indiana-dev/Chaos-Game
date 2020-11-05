@@ -37,3 +37,11 @@ function getInfraredColor(step) {
 function getRandomElementFromArray(arr) {
     return arr[floor(random(arr.length))]
 }
+
+function getRandomSaturatedColor() {
+    colorMode(HSL, 1)
+    let saturated_color = color(random(), 1, 0.5)
+    colorMode(RGB, 1)
+
+    return saturated_color
+} 
